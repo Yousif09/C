@@ -1,0 +1,19 @@
+expressions: formulas that show how to compute a value, rather than statements.
+
+The additive and multiplicative operators are said to be binary, because they require two operands.The unary operators require one operand: 
+
+
+i = +1; /* used as a unary operator */ 
+j = -1; /* used as a unary operator */ 
+
+remainder: %: the value of i % j is the reaminder when i is divided by j. For example, teh value of
+10 % 3 is 1, and the value of 12 % 4 is 0. 
+
+The / operator produces surprising results. When both of its operands are integers, the / operator
+"truncates" the result by dropping the fractional part. Thus the value of 1 / 2 is 0 not 0.5.
+
+The % operator requires integer operands. If either operand is not an integer, the program will NOTcompile. 
+
+using 0 of either / or % causes undefined behavior of course.
+
+
