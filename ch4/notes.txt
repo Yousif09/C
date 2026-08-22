@@ -16,4 +16,150 @@ The % operator requires integer operands. If either operand is not an integer, t
 
 using 0 of either / or % causes undefined behavior of course.
 
+NOTE:  an operator is right associative (usually operators are left associative), of it groups from right to left. The unary arithmetic operators (+ and -) are both right associative, so 
+
+- + i is equivalent to -(+i)
+
+precedence and associativity rules are important in many languages, but especially so in c. However, C has so many operators (almost fifty!) that few programmers bother to memorize the precedence and associativity rules. Instead, they consult a table of operators when in doubt or just use plenty of parantheses. 
+
+
+the = operator is right associative, so the assignment:
+
+i = j = k = 0; 
+
+is equivalent to: 
+
+i = (j = (k = 0));
+
+The effect is to assign 0 first to k, then to j, and finally to i
+
+
+
+Assignments that use the old value of a variable to compute its new value are
+common in C programs. The following statement, for example, adds 2 to the value stored in i:
+
+
+i = i + 2;
+
+THIS IS THE SAME AS: 
+
+C's (Compound assignment) operators which allow us to shorten this statement and
+others like it. Using the += operator, you can simply write: 
+
+i += 2; -> Same as i = i + 2; 
+
+
+But, it's not equivalent to it. One problem is operator precedence: i *= j + k 
+IS NOT the same as i = i * j + k. There are also rare cases in which
+v += e differs from v = v + e because v itself has a side effect. Similar 
+remarks apply to the other compound assignment operators. 
+
+increment and decrement operators: ++ and -- can be used as a prefix operator
+(++i and --i) or postfix operators (i++ and i--). A ++i (pre-increment) yields
+i + 1 and as a side effect, increments i. 
+
+
+expressions:
+
+C has the unusual rule that any expression can be used as a statement. That is, any expression can be turned into a statement simply by appending a semicolon. 
+
+++i; could be an example although useless. 
+
+
+i = 1; 
+
+in this second example, the value of i is fetched but NOT used; however i is decremented afterwards:
+
+i--; 
+
+
+in this third example, the value of the expression i * j - 1 is computed and then discarded: 
+
+i * j - 1; 
+
+since i and j aren't changed, the statement has no effect and therefore serves
+no purpose. 
+
+
+
+Q & A from other users:
+
+Q: How do you raise a number to a power in C?
+
+A: Raising an integer to a small positive integer power is best done by repeated
+mulitplication (i * i * i is i cubed). To raise a number to a noninteger power, 
+call the pow function. 
+
+Q: How to apply the % operator to a floating-opoint operand?
+
+A: The % operator requires integer operands only. Instead, try the fmod function
+instead. 
+
+Q: Why are the rules for using the / and % operators with negative operands so 
+complicated?
+
+A: The rules aren't as complicated as they may first appear. In both C89 and
+C99, the goal is to ensure that the value of (a / b) * b + a % b will always be 
+equal to a (and indeed, both standards guarantee that this is the case, provided that the value of a / b is "representable). The problem is that there are two 
+ways for a / b and a % b to satisfy this equality if either a or b is negative, 
+as seen in C89, where either -9/7 is -1 and -9 % 7 is -2. In todays age, the CPUS are designed to truncate the result of division towards zero, so this was written into the standard as the only allowable outcome. 
+
+Q: If C has lvalues, does it also have rvalues?
+
+A: Yes, An lvalue is an expression that can appear on the left side of an 
+assignment; an rvalue is an expression that can appear on the right side. thus,
+an rvalue could be a variable, constant, or more complex expression. The term 
+"expression" is used more than rvalue. 
+
+Q: how is v += e not equivalent to v = v + e if v has a side effect. Explain. 
+
+A: Evaluating v += e causes v to be evaluated only once; evaluating v = v + e 
+causes v to be evaluated twice. Any side effect caused by evaluating v will
+occur twice in the latter case. In the following example, i is incremented once: 
+a[i++] += 2; 
+
+if we use = instead of +=, here's what the statement will look like:
+
+a[i++] = a[i++] + 2; 
+
+The value of i is modified as well as used elsewhere in the statement, so the
+effect of executing the statement is undefined. It's likely that i will be
+incremented twice, but we can't say for certain what will actually happen. 
+
+Q: Why does C provide the ++ and -- operators? Are they faster than other 
+ways of incrementing and decrementing, or are they just more convenient?
+
+A: C inherited ++ and -- from Ken Thompson's earlier B language. Thompson created these operators because his B compiler could generate a more compact translation for ++i than for i = i + 1. These operators have become a deeply ingrained 
+part of C (in fact, many of C's most famous idioms rely on them). With modern
+compilers, using ++ and -- won't make a compiled program any smaller or faster;
+the continued popularity of these operators stems mostly from their brevity and 
+convenience. 
+
+Q: Do ++ and -- work with float variables?
+
+A: Yes; the increment and decrement operations can be applied to floating-point numbers as well as integers. In practice, it's very rare to increment or decrement a float variable. 
+
+Q: When I use the postfix version of ++ or --, just when is the increment 
+or decrement actually performed? 
+
+A: This is difficult to answer. The C standard introduces the concept of "sequence point" and says that "updating the stored value of the operand shall occur 
+between the previous and the next sequence point". There are various kinds of sequence points in C; the end of an expression statement is one example. By the
+end of an expression statement, all increments and decrements within the statement must have been performed; the next statement can't begin to execute until this condition has been met. Certain operators that you will encounter in later 
+chapters or scenarios (logical and, logical or, conditional, and comma) also
+impose sequence points. So do function calls; the arguments in a function call
+must be fully evaluated before the call can be performed. If an argument happensto be an expression containing a ++ or -- operator, the increment or decrement
+must occur before the call can take place. 
+
+Q: What do you mean when you say the value of an expression statement is discarded?
+
+A: By definition, an expression represents a value. If i has the value 5, for
+example, then evaluating i + 1 produces the value 6. Let's turn i + 1 into a 
+statement by putting a semicolon after it: 
+
+i + 1; 
+
+when this statement is executed the value of i + 1 is computed.. but it has not been saved anywhere so it just gets discarded or lost in memory.
+
+
+
 
